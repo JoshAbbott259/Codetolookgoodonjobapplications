@@ -1,0 +1,31 @@
+import numpy as np
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load the iris dataset
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# Split the data into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a logistic regression model
+model = LogisticRegression()
+
+# Train the model on the training data
+model.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = model.predict(X_test)
+
+# Calculate the accuracy of the model
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy: {:.2f}%".format(accuracy * 100))
+
+# This script demonstrates the basic steps in a machine learning workflow: loading a dataset, splitting the data into training and test sets, training a model, making predictions, and evaluating the model's performance.
+# It's using the iris dataset which is a built-in dataset in scikit-learn and using Logistic Regression as a model. The accuracy of the model is then calculated and printed.
+# It's worth noting that this is a very simple example, and in real-world scenarios, you would need to perform more complex pre-processing, feature engineering, and model selection to achieve better results.
