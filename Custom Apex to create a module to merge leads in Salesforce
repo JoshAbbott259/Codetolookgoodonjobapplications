@@ -1,0 +1,63 @@
+public class LeadMergeController {
+
+    public Lead masterLead {get; set;}
+    public Lead[] mergeLeads {get; set;}
+
+    public LeadMergeController() {
+        masterLead = new Lead();
+        mergeLeads = new Lead[]{};
+    }
+
+    public PageReference merge() {
+        if (masterLead != null && mergeLeads != null && mergeLeads.size() > 0) {
+            for (Lead l : mergeLeads) {
+                if (l.Id != masterLead.Id) {
+                    masterLead.Company += l.Company;
+                    masterLead.FirstName += l.FirstName;
+                    masterLead.LastName += l.LastName;
+                    masterLead.Email += l.Email;
+                    masterLead.Phone += l.Phone;
+                    masterLead.Website += l.Website;
+                    masterLead.Description += l.Description;
+                    masterLead.LeadSource += l.LeadSource;
+                    masterLead.Status += l.Status;
+                    masterLead.Rating += l.Rating;
+                    masterLead.Industry += l.Industry;
+                    masterLead.AnnualRevenue += l.AnnualRevenue;
+                    masterLead.NumberOfEmployees += l.NumberOfEmployees;
+                    masterLead.Street += l.Street;
+                    masterLead.City += l.City;
+                    masterLead.State += l.State;
+                    masterLead.PostalCode += l.PostalCode;
+                    masterLead.Country += l.Country;
+                    masterLead.Latitude += l.Latitude;
+                    masterLead.Longitude += l.Longitude;
+                    masterLead.IsConverted += l.IsConverted;
+                    masterLead.DoNotCall += l.DoNotCall;
+                    masterLead.DoNotEmail += l.DoNotEmail;
+                    masterLead.DoNotFax += l.DoNotFax;
+                    masterLead.DoNotMail += l.DoNotMail;
+                    masterLead.DoNotText += l.DoNotText;
+                    masterLead.DoNotBulkEmail += l.DoNotBulkEmail;
+                    masterLead.DoNotBulkPostalMail += l.DoNotBulkPostalMail;
+                    masterLead.DoNotFax += l.DoNotFax;
+                    masterLead.DoNotPhone += l.DoNotPhone;
+                    masterLead.DoNotVisit += l.DoNotVisit;
+                    masterLead.IsDeleted += l.IsDeleted;
+                    masterLead.LastModifiedDate += l.LastModifiedDate;
+                    masterLead.CreatedDate += l.CreatedDate;
+                    masterLead.CreatedById += l.CreatedById;
+                    masterLead.LastModifiedById += l.LastModifiedById;
+                    masterLead.SystemModstamp += l.SystemModstamp;
+                    masterLead.LastActivityDate += l.LastActivityDate;
+                    masterLead.LastViewedDate += l.LastViewedDate;
+                    masterLead.LastReferencedDate += l.LastReferencedDate;
+                }
+            }
+
+            update masterLead;
+
+            for (Lead l : mergeLeads) {
+                if (l.Id != masterLead.Id) {
+                    l.IsDeleted = true;
+                   
