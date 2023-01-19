@@ -1,2 +1,2 @@
 # Codetolookgoodonjobapplications
-Created this so for job applications it can demonstrate coding experience
+Created this for job applications so I can demonstrate coding experience
