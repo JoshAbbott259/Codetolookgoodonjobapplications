@@ -1,0 +1,38 @@
+import ccxt
+
+# Initialize the two exchanges
+exchange1 = ccxt.binance()
+exchange2 = ccxt.kraken()
+
+# Define the ticker symbol for bitcoin
+symbol = 'BTC/USD'
+
+# Get the ticker data for bitcoin on both exchanges
+ticker1 = exchange1.fetch_ticker(symbol)
+ticker2 = exchange2.fetch_ticker(symbol)
+
+# Get the bid and ask prices for bitcoin on both exchanges
+bid1 = ticker1['bid']
+ask1 = ticker1['ask']
+bid2 = ticker2['bid']
+ask2 = ticker2['ask']
+
+# Calculate the bid-ask spread for each exchange
+spread1 = ask1 - bid1
+spread2 = ask2 - bid2
+
+# Compare the bid-ask spreads to determine if there is an arbitrage opportunity
+if spread1 > spread2:
+    # Buy on exchange 1 and sell on exchange 2
+    buy_price = bid1
+    sell_price = ask2
+    profit = sell_price - buy_price
+    print("Arbitrage opportunity: buy on exchange 1 at " + str(buy_price) + " and sell on exchange 2 at " + str(sell_price) + " for a profit of " + str(profit))
+elif spread2 > spread1:
+    # Buy on exchange 2 and sell on exchange 1
+    buy_price = bid2
+    sell_price = ask1
+    profit = sell_price - buy_price
+    print("Arbitrage opportunity: buy on exchange 2 at " + str(buy_price) + " and sell on exchange 1 at " + str(sell_price) + " for a profit of " + str(profit))
+else:
+    print("No arbitrage opportunity")
