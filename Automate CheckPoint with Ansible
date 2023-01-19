@@ -1,0 +1,39 @@
+- name: CheckPoint Configuration
+  hosts: all
+  gather_facts: false
+  vars:
+    cp_username: admin
+    cp_password: admin
+    cp_server: 10.10.10.10
+  tasks:
+  - name: Get session token
+    uri:
+      url: "https://{{ cp_server }}/web_api/login"
+      method: POST
+      body: "{{ cp_username }}:{{ cp_password }}"
+      headers:
+        Content-Type: "application/json"
+    register: login_response
+
+  - name: Add network object
+    uri:
+      url: "https://{{ cp_server }}/web_api/add-network"
+      method: POST
+      body: "name={{ object_name }}&subnet={{ object_subnet }}"
+      headers:
+        Content-Type: "application/json"
+        X-chkp-sid: "{{ login_response.json.sid }}"
+    register: add_network_response
+
+  - name: Show network object
+    uri:
+      url: "https://{{ cp_server }}/web_api/show-network"
+      method: GET
+      headers:
+        Content-Type: "application/json"
+        X-chkp-sid: "{{ login_response.json.sid }}"
+    register: show_network_response
+
+  - name: Debug network object
+    debug:
+      var: show_network_response
