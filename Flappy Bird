@@ -1,0 +1,86 @@
+import pygame
+import random
+
+# Initialize pygame
+pygame.init()
+
+# Set the screen size and caption
+screen = pygame.display.set_mode((400, 600))
+pygame.display.set_caption("Flappy Bird")
+
+# Load the bird image
+bird_img = pygame.image.load("bird.png")
+
+# Set the bird's initial position
+bird_x = 150
+bird_y = 300
+
+# Set the bird's initial velocity
+bird_y_velocity = 0
+
+# Set the gravity
+gravity = 0.5
+
+# Set the pipe gap
+pipe_gap = 150
+
+# Set the pipe width
+pipe_width = 50
+
+# Create a list to store the pipes
+pipes = []
+
+# Create a variable to store the score
+score = 0
+
+# Set the game to running
+game_over = False
+
+# Main game loop
+while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_over = True
+
+    # Get the keys that are pressed
+    keys = pygame.key.get_pressed()
+
+    # If the space key is pressed, change the bird's velocity
+    if keys[pygame.K_SPACE]:
+        bird_y_velocity = -5
+
+    # Update the bird's position
+    bird_y += bird_y_velocity
+    bird_y_velocity += gravity
+
+    # Update the pipes
+    for pipe in pipes:
+        pipe[0] -= 2
+
+    # Remove pipes that have gone off the screen
+    pipes = [pipe for pipe in pipes if pipe[0] > -pipe_width]
+
+    # Add a new pipe every 100 frames
+    if len(pipes) == 0 or pipes[-1][0] < 400 - pipe_width - pipe_gap:
+        height = random.randint(50, 450)
+        pipes.append([400, height])
+
+    # Draw the pipes
+    for pipe in pipes:
+        pygame.draw.rect(screen, (0, 255, 0), (pipe[0], 0, pipe_width, pipe[1]))
+        pygame.draw.rect(screen, (0, 255, 0), (pipe[0], pipe[1] + pipe_gap, pipe_width, 600 - pipe[1] - pipe_gap))
+
+    # Draw the bird
+    screen.blit(bird_img, (bird_x, bird_y))
+
+    # Check for collisions
+    for pipe in pipes:
+        if (bird_x + bird_img.get_width() > pipe[0] and bird_x < pipe[0] + pipe_width and
+            bird_y < pipe[1] or bird_y + bird_img.get_height() > pipe[1] + pipe_gap):
+            game_over = True
+
+    # Increase the score
+    score += 1
+
+    # Display the score
+    score_text = font.render
