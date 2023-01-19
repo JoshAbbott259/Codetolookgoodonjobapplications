@@ -1,0 +1,57 @@
+---
+- name: Create a VPC
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    vpc_cidr_block: "10.0.0.0/16"
+    vpc_name: "my-vpc"
+    public_subnet_cidr: "10.0.1.0/24"
+    private_subnet_cidr: "10.0.2.0/24"
+
+  tasks:
+  - name: Create VPC
+    aws_vpc:
+      cidr_block: "{{ vpc_cidr_block }}"
+      name: "{{ vpc_name }}"
+      state: present
+    register: vpc
+    
+  - name: Create Public Subnet
+    aws_subnet:
+      vpc_id: "{{ vpc.vpc_id }}"
+      cidr_block: "{{ public_subnet_cidr }}"
+      state: present
+    register: public_subnet
+  
+  - name: Create Private Subnet
+    aws_subnet:
+      vpc_id: "{{ vpc.vpc_id }}"
+      cidr_block: "{{ private_subnet_cidr }}"
+      state: present
+    register: private_subnet
+    
+  - name: Create Internet Gateway
+    aws_internet_gateway:
+      vpc_id: "{{ vpc.vpc_id }}"
+      state: present
+    register: internet_gateway
+    
+  - name: Create Route Table
+    aws_route_table:
+      vpc_id: "{{ vpc.vpc_id }}"
+      state: present
+    register: route_table
+    
+  - name: Create Route
+    aws_route:
+      route_table_id: "{{ route_table.route_table_id }}"
+      destination_cidr_block: "0.0.0.0/0"
+      gateway_id: "{{ internet_gateway.gateway_id }}"
+      state: present
+      
+  - name: Associate Public Subnet with Route Table
+    aws_route_table_association:
+      subnet_id: "{{ public_subnet.subnet_id }}"
+      route_table_id: "{{ route_table.route_table_id }}"
+      state: present
